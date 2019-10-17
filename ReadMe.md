@@ -22,7 +22,7 @@
 - [Additional Notes](#additional-notes)
 
 # Optimus Pipeline Overview
-![Diagram](https://github.com/HumanCellAtlas/skylab/tree/master/pipelines/optimus/Optimus_diagram.png)
+![Diagram](https://github.com/HumanCellAtlas/skylab/blob/master/pipelines/optimus/Optimus_diagram.png)
 
 ## Introduction to the Optimus Workflow
 
