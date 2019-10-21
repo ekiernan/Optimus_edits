@@ -83,16 +83,16 @@ The json file also contains metadata for the following reference information:
 
 ## Optimus Modules Summary
 
-Here we describe the modules ("tasks") of the Optimus Pipeliene; [the code](https://github.com/HumanCellAtlas/skylab/blob/master/pipelines/optimus/Optimus.wdl) and [library of tasks](https://github.com/HumanCellAtlas/skylab/tree/master/library/tasks) are available through Github.
+Here we describe the modules ("tasks") of the Optimus Pipeliene; [the code](https://github.com/HumanCellAtlas/skylab/blob/master/pipelines/optimus/Optimus.wdl) and [library of tasks](https://github.com/HumanCellAtlas/skylab/tree/master/library/tasks) are available through GitHub.
 
 Overall, the workflow:
 1. Converts R2 fastq file (containing alignable genomic information) to an unaligend BAM (UBAM)
 2. Corrects and attaches 10X Barcodes using the R1 Fastq file 
 3. Aligns reads to the genome with STAR v.2.5.3a
 4. Annotates genes with aligned reads
-7. Calculates summary metrics
-6. Detects empty droplets
 5. Corrects UMIs
+6. Calculates summary metrics
+6. Detects empty droplets
 8. Produces a UMI-aware expression matrix
 9. Returns output in BAM, Zarr, or Loom file formats
 
@@ -106,7 +106,7 @@ Unlike fastq files, BAM files enable researchers to keep track of important meta
 
 Although the function of the cell barcodes is to identify unique cells, barcode errors can arise during sequencing (such as incorporation of the barcode into contaminating DNA or sequencing and PCR errors), making it difficult to distinguish unique cells from artifactual appearances of the barcode. The [Attach10xBarcodes](https://github.com/HumanCellAtlas/skylab/blob/master/library/tasks/Attach10xBarcodes.wdl) task evaluates barcode errors by comparing the R1 fastq sequences against a whitelist of known barcode sequences.
 
-Next, the [Attach10xBarcodes](https://github.com/HumanCellAtlas/skylab/blob/master/library/tasks/Attach10xBarcodes.wdl) task appends the UMI and Cell Barcode sequences from the R1 fastq to the UBAM sequence as tags, properly labeling the genomic information for alignment.
+Next, the [Attach10xBarcodes](https://github.com/HumanCellAtlas/skylab/blob/master/library/tasks/Attach10xBarcodes.wdl) task uses [sc-tools v.0.3.4](https://github.com/HumanCellAtlas/sctools) to append the UMI and Cell Barcode sequences from the R1 fastq to the UBAM sequence as tags, properly labeling the genomic information for alignment. 
 
 The output is a UBAM file containing the reads with correct barcodes, including barcodes that came within one edit distance ([Levenshtein distance](http://www.levenshtein.net/)) of matching the whitelist of barcode sequences and were corrected by this tool. Correct barcodes are assigned a “CB” tag. Uncorrectable barcodes (with more than one error) are preserved and given a “CR” (Cell barcode Raw) tag. Cell barcode quality scores are also preserved in the file under the “CY” tag.
 
@@ -127,23 +127,21 @@ UMIs are designed to distinguish unique transcripts present in the cell at lysis
 
 ### 6. Summary Metric Calculation
 
-The Metrics task calls the [SequenceDataWithMoleculeTagMetrics.wdl](https://github.com/HumanCellAtlas/skylab/blob/master/library/tasks/SequenceDataWithMoleculeTagMetrics.wdl) to calculate summary metrics which are used assess the quality of the data output each time this pipeline is run. This task uses sctools v.0.3.3] These metrics are included in ZARR and Loom output files.
+The Metrics task calls the [SequenceDataWithMoleculeTagMetrics.wdl](https://github.com/HumanCellAtlas/skylab/blob/master/library/tasks/SequenceDataWithMoleculeTagMetrics.wdl) to calculate summary metrics which are used assess the quality of the data output each time this pipeline is run. This task uses sctools v.0.3.3](https://github.com/HumanCellAtlas/sctools). These metrics are included in the ZARR and [Loom](link to Loom schema) output files.
 
 ### 7. Identification of Empty Droplets
 
-In addition, the pipeline runs the EmptyDrops function from the [dropletUtils](http://bioconductor.org/packages/release/bioc/html/DropletUtils.html) R package to identify cell barcodes that correspond to empty droplets. Empty droplets are those that did not encapsulate a cell but instead acquired cell-free RNA from the solution in which the cells resided -- such as secreted RNA or RNA released when some cells lysed in solution ([Lun, et al., 2018](https://www.ncbi.nlm.nih.gov/pubmed/?term=30902100)). This ambient RNA can serve as a substrate for reverse transcription, leading to a small number of background reads. Cell barcodes that are not believed to represent cells are identified in the metrics and raw information from dropletUtils is provided to the user.
-
+Empty droplets are lipid droplets that did not encapsulate a cell during 10X sequencing, but instead acquired cell-free RNA (secreted RNA or RNA released during cell lysis ([Lun, et al., 2018](https://www.ncbi.nlm.nih.gov/pubmed/?term=30902100)) from the solution in which the cells resided. This ambient RNA can serve as a substrate for reverse transcription, leading to a small number of background reads. The Optimus pipeline calls the RunEmptyDrops task which uses the [dropletUtils v.0.1.1](http://bioconductor.org/packages/release/bioc/html/DropletUtils.html) R package to flag cell barcodes that represent empty droplets rather than cells. These metrics are stored in the output Zarr and [Loom](link to Loom schema) files. 
 
 ### 8. Expression Matrix Construction
 
-The pipeline outputs a count matrix that contains, for each cell barcode and for each gene, the number of molecules that were observed. The script that generates this matrix evaluates every read. It discards any read that maps to more than one gene, and counts any remaining reads provided the triplet of cell barcode, molecule barcode, and gene name is unique, indicating the read originates from a single transcript present at the time of lysis of the cell.
-
+The pipeline outputs an expression matrix that contains, for each cell barcode and for each gene, the number of molecules that were observed. The script that generates this matrix evaluates every read. It discards any read that maps to more than one gene, and counts any remaining reads provided the triplet of cell barcode, molecule barcode, and gene name is unique, indicating the read originates from a single transcript present at the time of lysis of the cell.
 
 ### 9. Outputs
-The outputs from the Optimus pipeline can be identified from the outputs of the individual tasks. A sample json file for outputs is listed [here](https://github.com/HumanCellAtlas/skylab/blob/master/pipelines/optimus/example_test_outputs.json).
 
 Output files of the pipeline include:
-1. Cell x gene unnormalized count matrix
+
+1. Cell x Gene unnormalized expression matrix
 2. Unfiltered, sorted BAM file (BamTags are used to tag reads that could be filtered downstream)
 3. Cell metadata, including cell metrics
 4. Gene metadata, including gene metrics
@@ -171,8 +169,10 @@ Following are the the types of files produced from the pipeline.
 | v1.3.3 | 08/29/2019 | This version and newer have been validated to additionally support Mouse data. The gene expression per cell is now counted by gencode geneID instead of gene name. There is an additional output mapping geneID to gene name provided. This is a breaking change. | 
 | v1.0.0 |03/30/2019 | Initial pipeline release. Validated on hg38 gencodev27. | 
 
-# Additional Notes
+# Have Suggestions? 
 
-Some of the tasks in Optimus use the [sctools](https://github.com/HumanCellAtlas/sctools) library of utilities for large scale distributed single cell data processing, and [Picard](https://broadinstitute.github.io/picard/) tools, a set of command line tools for manipulating high-throughput sequencing data in formats such as SAM/BAM/CRAM and VCF.
+We have an document dedicated to open issues! Please help us make our tools better. 
+
+
 
 
