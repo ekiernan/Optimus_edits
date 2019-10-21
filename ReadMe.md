@@ -14,7 +14,7 @@
     + [3. Alignment](#3-alignment)
     + [4. Gene Annotation](#4-gene-annotation)
     + [5. UMI Correction](#5-umi-correction)
-    + [6. Metric Calculation](#6-metric-calculation)
+    + [6. Summary Metric Calculation](#6-summary-metric-calculation)
     + [7. Identification of Empty Droplets](#7-identification-of-empty-droplets)
     + [8. Expression Matrix Construction](#8-expression-matrix-construction)
     + [9. Outputs](#9-outputs)
@@ -118,16 +118,16 @@ Optimus uses the [STAR alignment](https://github.com/HumanCellAtlas/skylab/blob/
 
 ### 4. Gene Annotation
 
-The [TagGeneExon](https://github.com/HumanCellAtlas/skylab/blob/master/library/tasks/TagGeneExon.wdl) task then annotates each read with the type of sequence to which it aligns. These annotations include INTERGENIC, INTRONIC, and EXONIC, and are stored using the XF BAM tag. In cases where the gene corresponds to an intron or exon, the name of the gene that overlaps the alignment is associated with the read and stored using the GE BAM tag.
+The [TagGeneExon](https://github.com/HumanCellAtlas/skylab/blob/master/library/tasks/TagGeneExon.wdl) task then uses [Drop-seq tools v.1.13](https://github.com/broadinstitute/Drop-seq) to annotate each read with the type of sequence to which it aligns. These annotations include INTERGENIC, INTRONIC, and EXONIC, and are stored using the XF BAM tag. In cases where the gene corresponds to an intron or exon, the name of the gene that overlaps the alignment is associated with the read and stored using the GE BAM tag.
 
 
 ### 5. UMI Correction
 
-UMIs are designed to distinguish unique transcripts present in the cell at lysis from those arising from PCR amplification of these same transcripts. But, like cell barcodes, UMIs can also be incorrectly sequenced or amplified. Optimus uses the [UmiCorrection task](https://github.com/HumanCellAtlas/skylab/blob/master/library/tasks/UmiCorrection.wdl) to apply a network-based, "directional" method ([Smith, et al., 2017](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5340976/)) to account for such errors. 
+UMIs are designed to distinguish unique transcripts present in the cell at lysis from those arising from PCR amplification of these same transcripts. But, like cell barcodes, UMIs can also be incorrectly sequenced or amplified. Optimus uses the [UmiCorrection task](https://github.com/HumanCellAtlas/skylab/blob/master/library/tasks/UmiCorrection.wdl) to apply a network-based, "directional" method ([Smith, et al., 2017](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5340976/)) to account for such errors using [Umi-tools v.0.0.1](https://pypi.org/project/umi-tools/0.0.1/) 
 
-### 6. Metric Calculation
+### 6. Summary Metric Calculation
 
-A number of [quality control tools](https://github.com/HumanCellAtlas/sctools) are used to assess the quality of the data output each time this pipeline is run. For a list of the tools and information about each one please see our [QC Metrics](/pipelines/hca-pipelines/data-processing-pipelines/qc-metrics) page. These metrics are included in ZARR and Loom output files.
+The Metrics task calls the [SequenceDataWithMoleculeTagMetrics.wdl](https://github.com/HumanCellAtlas/skylab/blob/master/library/tasks/SequenceDataWithMoleculeTagMetrics.wdl) to calculate summary metrics which are used assess the quality of the data output each time this pipeline is run. This task uses sctools v.0.3.3] These metrics are included in ZARR and Loom output files.
 
 ### 7. Identification of Empty Droplets
 
