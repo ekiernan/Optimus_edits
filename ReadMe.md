@@ -78,7 +78,7 @@ The json file also contains metadata for the following reference information:
 
 # Running Optimus
 
-* [Optimus.wdl](https://github.com/HumanCellAtlas/skylab/blob/master/pipelines/optimus/Optimus.wdl) in the pipelines/optimus folder,  of the repository, implements the workflow by importing individual tasks in task based WDLs in skylab/library.
+* The [Optimus.wdl](https://github.com/HumanCellAtlas/skylab/blob/master/pipelines/optimus/Optimus.wdl) in the pipelines/optimus folder of the HCA Skylab repository implements the workflow by importing individual modules ("tasks" written in  WDL) from the Skylab [Library](https://github.com/HumanCellAtlas/skylab/tree/master/library) folder.
 
 
 ## Optimus Modules Summary
@@ -140,7 +140,7 @@ The pipeline outputs an expression matrix that contains, for each cell barcode a
 Output files of the pipeline include:
 
 1. Cell x Gene unnormalized expression matrix
-2. Unfiltered, sorted BAM file (BamTags are used to tag reads that could be filtered downstream)
+2. Unfiltered, sorted BAM file with [barcode and downstream analysis Tags](link to UBAM Tag Description)
 3. Cell metadata, including cell metrics
 4. Gene metadata, including gene metrics
 
