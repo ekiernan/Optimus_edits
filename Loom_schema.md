@@ -1,7 +1,13 @@
-## What's in my Loom file?
+# What's in the Optimus Pipeline Loom File?
+
+The Loom file is an HDF5 matrix file generated using [Loompy v.3.0](http://loompy.org/). It contains multiple metrics for both individual genes (the rows of the matrix) and cells (the columns of the matrix). The tables below document these metrics, define them, and describe any relevant tools used to generate them. 
+
+
+## Cell Metrics
 
 | Cell Metrics                      | Program            |Details                 |
 |-----------------------------------|--------------------|------------------------|
+|`CellID` |  [optimus_zarr_to_loom.py](https://github.com/HumanCellAtlas/skylab/blob/84bc10d4f1102390f63ec780d856b09884e0968f/docker/zarr-to-loom/optimus_zarr_to_loom.py) | The uniqe identifier for each cell | 
 |`n_reads`|[SC Tools](https://github.com/HumanCellAtlas/sctools/tree/master/src/sctools/metrics)|The number of reads associated with this entity. [Metrics Definitions](https://sctools.readthedocs.io/en/latest/sctools.metrics.html#sctools.metrics.aggregator.CellMetrics.n_reads)|
 |`noise_reads`|[SC Tools](https://github.com/HumanCellAtlas/sctools/tree/master/src/sctools/metrics)|Number of reads that are categorized by 10x Genomics Cell Ranger as "noise". Refers to long polymers, or reads with high numbers of N (ambiguous) nucleotides. [Metrics Definitions](https://sctools.readthedocs.io/en/latest/sctools.metrics.html#sctools.metrics.aggregator.CellMetrics.noise_reads)|
 |`perfect_molecule_barcodes`|[SC Tools](https://github.com/HumanCellAtlas/sctools/tree/master/src/sctools/metrics)|The number of reads with molecule barcodes that have no errors. [Metrics Definitions](https://sctools.readthedocs.io/en/latest/sctools.metrics.html#sctools.metrics.aggregator.CellMetrics.perfect_molecule_barcodes)|
@@ -33,7 +39,15 @@
 |`cell_barcode_fraction_bases_above_30_mean`|[SC Tools](https://github.com/HumanCellAtlas/sctools/tree/master/src/sctools/metrics)|The average fraction of Illumina base calls for the cell barcode sequence that are greater than 30, across molecules. [Metrics Definitions](https://sctools.readthedocs.io/en/latest/sctools.metrics.html#sctools.metrics.aggregator.CellMetrics.cell_barcode_fraction_bases_above_30_mean)|
 |`n_genes`|[SC Tools](https://github.com/HumanCellAtlas/sctools/tree/master/src/sctools/metrics)|The number of genes detected by this cell. [Metrics Definitions](https://sctools.readthedocs.io/en/latest/sctools.metrics.html#sctools.metrics.aggregator.CellMetrics.n_genes)|
 |`genes_detected_multiple_observations`|[SC Tools](https://github.com/HumanCellAtlas/sctools/tree/master/src/sctools/metrics)|The number of genes that are observed by more than one read in this cell. [Metrics Definitions](https://sctools.readthedocs.io/en/latest/sctools.metrics.html#sctools.metrics.aggregator.CellMetrics.genes_detected_multiple_observations)|
+| `reads_unmapped`| [SC Tools](https://github.com/HumanCellAtlas/sctools/blob/master/src/sctools/metrics/aggregator.py) | Reads that are non-transcriptomic |
+| `emptydrops_FDR` | [dropletUtils](https://bioconductor.org/packages/release/bioc/html/DropletUtils.html) | False Discovery Rate |
+| `emptydrops_IsCell` | [dropletUtils](https://bioconductor.org/packages/release/bioc/html/DropletUtils.html) | Calls cells according to an FDR cutoff |
+| `emptydrops_Limited` | [dropletUtils](https://bioconductor.org/packages/release/bioc/html/DropletUtils.html) | Indicates whether a lower p-value could be obtained by increasing niters |
+|`emptydrops_LogProb` | [dropletUtils](https://bioconductor.org/packages/release/bioc/html/DropletUtils.html) | The log-probability of observing the barcode’s count vector under the null model |
+| `emptydrops_PValue'` | [dropletUtils](https://bioconductor.org/packages/release/bioc/html/DropletUtils.html) | Numeric, the Monte Carlo p-value against the null model | 
+| `emptydrops_Total` | [dropletUtils](https://bioconductor.org/packages/release/bioc/html/DropletUtils.html) | Numeric, the total counts for each barcode |
 
+## Gene Metrics
 
 | Gene Metrics                  | Program            |Details                 | 
 |-------------------------------|--------------------|------------------------|
@@ -63,3 +77,6 @@
 |`molecules_with_single_read_evidence`|[SC Tools](https://github.com/HumanCellAtlas/sctools/tree/master/src/sctools/metrics)|The number of molecules associated with this entity that are observed by only one read. [Metrics Definitions](https://sctools.readthedocs.io/en/latest/sctools.metrics.html#sctools.metrics.aggregator.CellMetrics.molecules_with_single_read_evidence)|
 |`number_cells_detected_multiple`|[SC Tools](https://github.com/HumanCellAtlas/sctools/tree/master/src/sctools/metrics)|The number of cells which observe more than one read of this gene. [Metrics Definitions](https://sctools.readthedocs.io/en/latest/sctools.metrics.html#sctools.metrics.aggregator.GeneMetrics.number_cells_detected_multiple)|
 |`number_cells_expressing`|[SC Tools](https://github.com/HumanCellAtlas/sctools/tree/master/src/sctools/metrics)|The number of cells that detect this gene. [Metrics Definitions](https://sctools.readthedocs.io/en/latest/sctools.metrics.html#sctools.metrics.aggregator.GeneMetrics.number_cells_expressing)|
+|
+
+
