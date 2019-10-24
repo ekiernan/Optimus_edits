@@ -1,3 +1,7 @@
+| Pipeline Version | Date Updated | Documentation Author | Questions or Feedback |
+| :----: | :---: | :----: | :--------------: |
+| optimus_v1.3.6 | October 10, 2019 | [Elizabeth Kiernan](mailto:ekiernan@broadinstitute.org) | Please file GitHub issues in skylab or contact [Kylee Degatano](mailto:kdegatano@broadinstitute.org) |
+
 # Table of Contents
 - [Optimus Pipeline Overview](#optimus-pipeline-overview)
   * [Introduction to the Optimus Workflow](#introduction-to-the-optimus-workflow)
