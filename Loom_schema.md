@@ -1,6 +1,6 @@
 # What's in the Optimus Pipeline Loom File?
 
-The Loom file is an HDF5 matrix file generated using [Loompy v.3.0](http://loompy.org/). It contains multiple metrics for both individual genes (the rows of the matrix) and cells (the columns of the matrix). The tables below document these metrics, define them, and describe any relevant tools used to generate them. 
+The Loom file is an HDF5 matrix file generated using [Loompy v.3.0](http://loompy.org/). It contains multiple metrics for both individual genes (the rows of the matrix) and cells (the columns of the matrix). The tables below document these metrics, list which tools generate them, and define them. 
 
 
 ## Cell Metrics
@@ -77,5 +77,9 @@ The Loom file is an HDF5 matrix file generated using [Loompy v.3.0](http://loomp
 |`number_cells_detected_multiple`|[SC Tools](https://github.com/HumanCellAtlas/sctools/tree/master/src/sctools/metrics)|The number of cells which observe more than one read of this gene. [Metrics Definitions](https://sctools.readthedocs.io/en/latest/sctools.metrics.html#sctools.metrics.aggregator.GeneMetrics.number_cells_detected_multiple)|
 |`number_cells_expressing`|[SC Tools](https://github.com/HumanCellAtlas/sctools/tree/master/src/sctools/metrics)|The number of cells that detect this gene. [Metrics Definitions](https://sctools.readthedocs.io/en/latest/sctools.metrics.html#sctools.metrics.aggregator.GeneMetrics.number_cells_expressing)|
 |
+
+# What does a Loom file look like?
+
+Let's explore a Loom file generated with [Human Cell Atlas](https://data.humancellatlas.org/explore/projects) sample data. 
 
 
