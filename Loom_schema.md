@@ -5,8 +5,8 @@ The Loom file is an HDF5 matrix file generated using [Loompy v.3.0](http://loomp
 
 ## Cell Metrics
 
-| Cell Metrics                      | Program            |Details                 |
-|-----------------------------------|--------------------|------------------------|
+| Cell Metrics | Program   |Details                                               |
+|--------------|-----------|----------------------------------------------        |
 |`CellID` |  [optimus_zarr_to_loom.py](https://github.com/HumanCellAtlas/skylab/blob/84bc10d4f1102390f63ec780d856b09884e0968f/docker/zarr-to-loom/optimus_zarr_to_loom.py) | The uniqe identifier for each cell | 
 |`n_reads`|[SC Tools](https://github.com/HumanCellAtlas/sctools/tree/master/src/sctools/metrics)|The number of reads associated with this entity. [Metrics Definitions](https://sctools.readthedocs.io/en/latest/sctools.metrics.html#sctools.metrics.aggregator.CellMetrics.n_reads)|
 |`noise_reads`|[SC Tools](https://github.com/HumanCellAtlas/sctools/tree/master/src/sctools/metrics)|Number of reads that are categorized by 10x Genomics Cell Ranger as "noise". Refers to long polymers, or reads with high numbers of N (ambiguous) nucleotides. [Metrics Definitions](https://sctools.readthedocs.io/en/latest/sctools.metrics.html#sctools.metrics.aggregator.CellMetrics.noise_reads)|
