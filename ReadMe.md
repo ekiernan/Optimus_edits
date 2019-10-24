@@ -42,7 +42,7 @@ Optimus has been validated for analyzing both [human](https://github.com/HumanCe
 | Aligner           | STAR (v.2.5.3)       | [Dobin, et al.,2013](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3530905/) |
 | Transcript Quantification | Utilities for processing large-scale single cell datasets | [Sctools](https://github.com/HumanCellAtlas/sctools)                          
 | Data Input File Format | File format in which sequencing data is provided | [FASTQ](https://academic.oup.com/nar/article/38/6/1767/3112533) |                     
-| Data Output File Format | File formats in which Optimus output is provided | [BAM](http://samtools.github.io/hts-specs/), [Zarr version 2](https://zarr.readthedocs.io/en/stable/spec/v2.html), Python numpy arrays (internal), Loom (generated with [Loompy v.3.0)](http://loompy.org/) |
+| Data Output File Format | File formats in which Optimus output is provided | [BAM](http://samtools.github.io/hts-specs/), [Zarr version 2](https://zarr.readthedocs.io/en/stable/spec/v2.html), Python numpy arrays (internal), Loom (generated with [Loompy v.2.0.17)](http://loompy.org/) |
 
 # Set-up
 
@@ -129,15 +129,11 @@ The Metrics task calls the [SequenceDataWithMoleculeTagMetrics.wdl](https://gith
 
 ### 7. Expression Matrix Construction
 
-The pipeline outputs an expression matrix that contains, for each cell barcode and for each gene, the number of molecules that were observed. The script that generates this matrix evaluates every read. It discards any read that maps to more than one gene, and counts any remaining reads provided the triplet of cell barcode, molecule barcode, and gene name is unique, indicating the read originates from a single transcript present at the time of lysis of the cell.
+The Optimus [Count]((https://github.com/HumanCellAtlas/skylab/blob/master/library/tasks/CreateCountMatrix.wdl)) task evaluates every read in the BAM file and creates a UMI-aware expression matrix using [Drop-seq tools](https://github.com/broadinstitute/Drop-seq). This matrix contains the number of molecules that were observed for each cell barcode and for each gene. The task discards any read that maps to more than one gene, and counts any remaining reads provided the triplet of cell barcode, molecule barcode, and gene name is unique, indicating the read originates from a single transcript present at the time of cell lysis.
 
 ### 8. Identification of Empty Droplets
 
 Empty droplets are lipid droplets that did not encapsulate a cell during 10X sequencing, but instead acquired cell-free RNA (secreted RNA or RNA released during cell lysis ([Lun, et al., 2018](https://www.ncbi.nlm.nih.gov/pubmed/?term=30902100)) from the solution in which the cells resided. This ambient RNA can serve as a substrate for reverse transcription, leading to a small number of background reads. The Optimus pipeline calls the RunEmptyDrops task which uses the [dropletUtils v.0.1.1](http://bioconductor.org/packages/release/bioc/html/DropletUtils.html) R package to flag cell barcodes that represent empty droplets rather than cells. These metrics are stored in the output Zarr and [Loom](link to Loom schema) files. 
-
-### 8. Expression Matrix Construction
-
-The pipeline outputs an expression matrix that contains, for each cell barcode and for each gene, the number of molecules that were observed. The script that generates this matrix evaluates every read. It discards any read that maps to more than one gene, and counts any remaining reads provided the triplet of cell barcode, molecule barcode, and gene name is unique, indicating the read originates from a single transcript present at the time of lysis of the cell.
 
 ### 9. Outputs
 
