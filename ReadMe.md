@@ -15,8 +15,8 @@
     + [4. Gene Annotation](#4-gene-annotation)
     + [5. UMI Correction](#5-umi-correction)
     + [6. Summary Metric Calculation](#6-summary-metric-calculation)
-    + [7. Identification of Empty Droplets](#7-identification-of-empty-droplets)
-    + [8. Expression Matrix Construction](#8-expression-matrix-construction)
+    + [7. Expression Matrix Construction](#7-expression-matrix-construction)
+    + [8. Identification of Empty Droplets](#8-identification-of-empty-droplets)
     + [9. Outputs](#9-outputs)
 - [Versioning](#versioning)
 - [Additional Notes](#additional-notes)
@@ -92,8 +92,8 @@ Overall, the workflow:
 4. Annotates genes with aligned reads
 5. Corrects UMIs
 6. Calculates summary metrics
-6. Detects empty droplets
-8. Produces a UMI-aware expression matrix
+7. Produces a UMI-aware expression matrix
+8. Detects empty droplets
 9. Returns output in BAM, Zarr, or Loom file formats
 
 Special care is taken to flag but avoid the removal of reads that are not aligned or that do not contain recognizable barcodes. This design (which differs from many pipelines currently available) allows use of the entire dataset by those who may want to use alternative filtering or leverage the data for methodological development associated with the data processing.
@@ -127,7 +127,11 @@ UMIs are designed to distinguish unique transcripts present in the cell at lysis
 
 The Metrics task calls the [SequenceDataWithMoleculeTagMetrics.wdl](https://github.com/HumanCellAtlas/skylab/blob/master/library/tasks/SequenceDataWithMoleculeTagMetrics.wdl) to calculate summary metrics which are used assess the quality of the data output each time this pipeline is run. This task uses sctools v.0.3.3](https://github.com/HumanCellAtlas/sctools). These metrics are included in the ZARR and [Loom](link to Loom schema) output files.
 
-### 7. Identification of Empty Droplets
+### 7. Expression Matrix Construction
+
+The pipeline outputs an expression matrix that contains, for each cell barcode and for each gene, the number of molecules that were observed. The script that generates this matrix evaluates every read. It discards any read that maps to more than one gene, and counts any remaining reads provided the triplet of cell barcode, molecule barcode, and gene name is unique, indicating the read originates from a single transcript present at the time of lysis of the cell.
+
+### 8. Identification of Empty Droplets
 
 Empty droplets are lipid droplets that did not encapsulate a cell during 10X sequencing, but instead acquired cell-free RNA (secreted RNA or RNA released during cell lysis ([Lun, et al., 2018](https://www.ncbi.nlm.nih.gov/pubmed/?term=30902100)) from the solution in which the cells resided. This ambient RNA can serve as a substrate for reverse transcription, leading to a small number of background reads. The Optimus pipeline calls the RunEmptyDrops task which uses the [dropletUtils v.0.1.1](http://bioconductor.org/packages/release/bioc/html/DropletUtils.html) R package to flag cell barcodes that represent empty droplets rather than cells. These metrics are stored in the output Zarr and [Loom](link to Loom schema) files. 
 
