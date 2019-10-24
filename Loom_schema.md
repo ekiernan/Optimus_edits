@@ -1,6 +1,6 @@
 # What's in the Optimus Pipeline Loom File?
 
-The Loom file is an HDF5 matrix file generated using [Loompy v.3.0](http://loompy.org/). It contains multiple metrics for both individual genes (the rows of the matrix) and cells (the columns of the matrix). The tables below document these metrics, list which tools generate them, and define them. 
+The Loom file is an HDF5 matrix file generated using [Loompy v.2.0.17](http://loompy.org/). It contains multiple metrics for both individual genes (the rows of the matrix) and cells (the columns of the matrix). The tables below document these metrics, list which tools generate them, and define them. This Loom file is an optional output of the Optimus pipeline and is used only for internal purposes. Please note, this file is not the final Loom displayed on the [Human Cell Atlas Data Portal](https://data.humancellatlas.org/explore/projects). 
 
 
 ## Cell Metrics
@@ -76,10 +76,5 @@ The Loom file is an HDF5 matrix file generated using [Loompy v.3.0](http://loomp
 |`molecules_with_single_read_evidence`|[SC Tools](https://github.com/HumanCellAtlas/sctools/tree/master/src/sctools/metrics)|The number of molecules associated with this entity that are observed by only one read. [Metrics Definitions](https://sctools.readthedocs.io/en/latest/sctools.metrics.html#sctools.metrics.aggregator.CellMetrics.molecules_with_single_read_evidence)|
 |`number_cells_detected_multiple`|[SC Tools](https://github.com/HumanCellAtlas/sctools/tree/master/src/sctools/metrics)|The number of cells which observe more than one read of this gene. [Metrics Definitions](https://sctools.readthedocs.io/en/latest/sctools.metrics.html#sctools.metrics.aggregator.GeneMetrics.number_cells_detected_multiple)|
 |`number_cells_expressing`|[SC Tools](https://github.com/HumanCellAtlas/sctools/tree/master/src/sctools/metrics)|The number of cells that detect this gene. [Metrics Definitions](https://sctools.readthedocs.io/en/latest/sctools.metrics.html#sctools.metrics.aggregator.GeneMetrics.number_cells_expressing)|
-
-
-# What does a Loom file look like?
-
-Let's explore a Loom file generated with [Human Cell Atlas](https://data.humancellatlas.org/explore/projects) sample data. 
 
 
