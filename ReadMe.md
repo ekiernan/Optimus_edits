@@ -98,7 +98,7 @@ Overall, the workflow:
 6. Calculates summary metrics
 7. Produces a UMI-aware expression matrix
 8. Detects empty droplets
-9. Returns output in BAM, Zarr, or Loom file formats
+9. Returns a GA4GH compliant BAM and metric matrix in Zarr or Loom formats
 
 Special care is taken to flag but avoid the removal of reads that are not aligned or that do not contain recognizable barcodes. This design (which differs from many pipelines currently available) allows use of the entire dataset by those who may want to use alternative filtering or leverage the data for methodological development associated with the data processing.
 
